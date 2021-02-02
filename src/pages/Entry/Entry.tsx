@@ -1,17 +1,28 @@
 import React, {useState} from 'react';
-import firebase from '../../libraries/firebase';
+import Firebase from "firebase";
+import {Redirect} from 'react-router-dom';
 
-const Entry: React.FC = () => {
+interface Props {
+  auth: Firebase.auth.Auth;
+}
+
+const Entry: React.FC<Props> = ({auth}) => {
   const [error, setError] = useState('');
   const onClickHandler = async () => {
-    const res = await firebase.loginWithGoogle();
-    if (! res) {
-      console.error(res);
-      setError('入場時にエラーが発生しました。');
-      return;
-    }
-    // TODO: JWTのcookieの保存をする
-    console.log('logged in');
+    const provider = new Firebase.auth.GoogleAuthProvider();
+    await auth.signInWithPopup(provider)
+      .then(({user}) => {
+        if (user) {
+          console.log('redirect');
+          window.location.href = '/';
+        }
+        setError('ログイン中にエラーが発生しました');
+      })
+      .catch((err) => {
+        setError('ログイン中にエラーが発生しました');
+        console.error(err);
+        return null;
+      })
   }
   return (
     <div className="App">
