@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';s
+import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) =>
   createStyles({
