@@ -1,19 +1,24 @@
 import React, {useState} from 'react';
-import Firebase from "firebase";
+import Firebase from "firebase/app";
 import {Redirect} from 'react-router-dom';
 
 interface Props {
   auth: Firebase.auth.Auth;
+  database: Firebase.database.Database;
 }
 
-const Entry: React.FC<Props> = ({auth}) => {
+const Entry: React.FC<Props> = (props) => {
+  const {auth, database} = props;
   const [error, setError] = useState('');
   const onClickHandler = async () => {
     const provider = new Firebase.auth.GoogleAuthProvider();
     await auth.signInWithPopup(provider)
       .then(({user}) => {
         if (user) {
-          console.log('redirect');
+          database.ref('/online/' + user.uid).set({
+            last_change: Firebase.database.ServerValue.TIMESTAMP,
+          });
+
           window.location.href = '/';
         }
         setError('ログイン中にエラーが発生しました');
