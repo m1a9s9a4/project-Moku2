@@ -5,10 +5,11 @@ import EntryInput from '../../components/EntryInput/EntryInput';
 interface Props {
   auth: Firebase.auth.Auth;
   database: Firebase.database.Database;
+  setOnline: (bool: boolean) => void;
 }
 
 const Entry: React.FC<Props> = (props) => {
-  const {auth, database} = props;
+  const {auth, database, setOnline} = props;
   const [error, setError] = useState('');
   const onEntryHandler = async () => {
     const provider = new Firebase.auth.GoogleAuthProvider();
@@ -28,6 +29,7 @@ const Entry: React.FC<Props> = (props) => {
         username: user.uid.toLowerCase().slice(0, 5),
       })
         .then(() => {
+          setOnline(true);
           window.location.href = '/';
         });
     }
