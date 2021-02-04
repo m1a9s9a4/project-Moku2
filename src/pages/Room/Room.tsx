@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   createMuiTheme,
   createStyles,
@@ -10,6 +10,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import axios from 'axios';
+import firebase from "firebase/app";
+
 import Navigator from '../../components/Navigator/Navigator';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
@@ -166,18 +169,35 @@ const styles = createStyles({
   },
 });
 
-export interface RoomProps extends WithStyles<typeof styles> {}
+export interface RoomProps extends WithStyles<typeof styles> {
+  auth: firebase.auth.Auth;
+  database: firebase.database.Database;
+}
 
 const Room: React.FC<RoomProps> = (props) => {
-  const { classes } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { classes, auth, database } = props;
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [onlineMembers, setOnlineMembers] = useState({});
+
+  useEffect(() => {
+    let ref = database.ref('online');
+    ref.on('value', (ss) => {
+      setOnlineMembers(ss.val());
+    })
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const onExitHandler = () => {
-    console.log('exited');
+  const onExitHandler = async () => {
+    if (auth.currentUser?.uid) {
+      await database.ref('online/' + auth.currentUser.uid)
+        .remove((e) => {
+          auth.signOut();
+        })
+    }
+    window.location.href = '/entry';
   }
 
   return (
@@ -191,16 +211,20 @@ const Room: React.FC<RoomProps> = (props) => {
               variant="temporary"
               open={mobileOpen}
               onClose={handleDrawerToggle}
+              onlineMembers={onlineMembers}
             />
           </Hidden>
           <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} />
+            <Navigator
+              PaperProps={{ style: { width: drawerWidth } }}
+              onlineMembers={onlineMembers}
+            />
           </Hidden>
         </nav>
         <div className={classes.app}>
           <Header onExitHandler={onExitHandler} />
           <main className={classes.main}>
-            <Content />
+            <Content onlineMembers={onlineMembers} />
           </main>
           <footer className={classes.footer}>
             <Copyright />
