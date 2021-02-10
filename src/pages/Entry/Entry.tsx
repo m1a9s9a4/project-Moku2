@@ -1,12 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import EntryInput from '../../components/EntryInput/EntryInput';
 import {useAuth} from "../../contexts/AuthContext";
 import {useHistory} from 'react-router-dom';
 
-interface Props {
-}
-
-const Entry: React.FC<Props> = (props) => {
+const Entry: React.FC = () => {
   const {login} = useAuth();
   const history = useHistory();
 
@@ -21,9 +18,7 @@ const Entry: React.FC<Props> = (props) => {
     }
   }
   return (
-    <>
-      <EntryInput onEntryHandler={onEntryHandler} />
-    </>
+    <EntryInput onEntryHandler={onEntryHandler} />
   );
 }
 
