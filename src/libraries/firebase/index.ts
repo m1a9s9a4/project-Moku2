@@ -16,4 +16,5 @@ fb.initializeApp({
 const fbAuth = fb.auth();
 const fbDatabase = fb.database();
 
-export {fb, fbAuth, fbDatabase};
+export {fbAuth, fbDatabase};
+export default fb;
