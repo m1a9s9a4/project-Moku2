@@ -9,6 +9,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Omit } from '@material-ui/types';
 
+import {useAuth} from '../../contexts/AuthContext';
+
 const styles = (theme: Theme) =>
   createStyles({
     categoryHeader: {
@@ -51,10 +53,12 @@ const styles = (theme: Theme) =>
     },
   });
 
+
 export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> {}
 
-function Navigator(props: NavigatorProps) {
-  const { classes, ...other } = props;
+const Navigator: React.FC<NavigatorProps> = (props) => {
+  const {classes, ...other} = props;
+  const {onlineMembers} = useAuth();
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -71,32 +75,22 @@ function Navigator(props: NavigatorProps) {
             オンライン
           </ListItemText>
         </ListItem>
-        <ListItem
-          button
-          className={clsx(classes.item)}
-        >
-          <ListItemIcon className={classes.itemIcon}><PersonIcon /></ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary,
-            }}
+        {Object.keys(onlineMembers).map((key, i) => (
+          <ListItem
+            button
+            className={clsx(classes.item)}
+            key={i}
           >
-            Aさん
-          </ListItemText>
-        </ListItem>
-        <ListItem
-          button
-          className={clsx(classes.item)}
-        >
-          <ListItemIcon className={classes.itemIcon}><PersonIcon /></ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary,
-            }}
-          >
-            Aさん
-          </ListItemText>
-        </ListItem>
+            <ListItemIcon className={classes.itemIcon}><PersonIcon /></ListItemIcon>
+            <ListItemText
+              classes={{
+                primary: classes.itemPrimary,
+              }}
+            >
+              {onlineMembers[key].username} さん
+            </ListItemText>
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );
