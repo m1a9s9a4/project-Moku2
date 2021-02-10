@@ -9,10 +9,8 @@ const Entry: React.FC = () => {
 
   const onEntryHandler = async () => {
     try {
-      console.log('log in started...')
       await login();
       history.push('/');
-      console.log('log in finished...')
     } catch (e) {
       console.error('failed to login');
     }

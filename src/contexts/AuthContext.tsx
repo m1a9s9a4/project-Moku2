@@ -78,7 +78,6 @@ export const AuthProvider: React.FC = ({children}) => {
     const provider = new fb.auth.GoogleAuthProvider();
     const user = await fbAuth.signInWithPopup(provider)
       .then(({user}) => {
-        console.log(user);
         return user;
       })
       .catch((e) => {
@@ -93,7 +92,6 @@ export const AuthProvider: React.FC = ({children}) => {
       });
 
       setCurrentUser(user);
-      console.log('logged in');
     }
   }
 
