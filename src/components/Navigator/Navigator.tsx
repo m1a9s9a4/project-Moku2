@@ -8,8 +8,42 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Omit } from '@material-ui/types';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
 
 import {useAuth} from '../../contexts/AuthContext';
+import Grid from "@material-ui/core/Grid";
+
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      backgroundColor: '#44b700',
+      color: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        animation: '$ripple 1.2s infinite ease-in-out',
+        border: '1px solid currentColor',
+        content: '""',
+      },
+    },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
+  }),
+)(Badge);
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -81,7 +115,20 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
             className={clsx(classes.item)}
             key={i}
           >
-            <ListItemIcon className={classes.itemIcon}><PersonIcon /></ListItemIcon>
+            <ListItemIcon className={classes.itemIcon}>
+              <StyledBadge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                variant="dot"
+              >
+                <Avatar alt={onlineMembers[key].username} >
+                  {onlineMembers[key].username.slice(0, 1)}
+                </Avatar>
+              </StyledBadge>
+            </ListItemIcon>
             <ListItemText
               classes={{
                 primary: classes.itemPrimary,

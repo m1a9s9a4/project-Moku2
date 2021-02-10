@@ -48,7 +48,7 @@ interface EntryInputProps extends WithStyles<typeof styles> {
   onEntryHandler: () => void;
 }
 
-function EntryInput(props: EntryInputProps) {
+const EntryInput: React.FC<EntryInputProps> = (props) => {
   const {classes, onEntryHandler} = props;
 
   return (

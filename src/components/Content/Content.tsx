@@ -101,7 +101,7 @@ const Content: React.FC<ContentProps> = (props) => {
                 variant="dot"
                 >
                 <Avatar alt={onlineMembers[key].username} className={classes.icon} >
-                  {onlineMembers[key].username}
+                  {onlineMembers[key].username.slice(0, 1)}
                 </Avatar>
               </StyledBadge>
             </Grid>
