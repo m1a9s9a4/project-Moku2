@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   createMuiTheme,
   createStyles,
@@ -10,12 +10,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import axios from 'axios';
-import firebase from "firebase/app";
+import {useHistory} from 'react-router-dom';
 
 import Navigator from '../../components/Navigator/Navigator';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
+import {useAuth} from "../../contexts/AuthContext";
 
 function Copyright() {
   return (
@@ -169,35 +169,25 @@ const styles = createStyles({
   },
 });
 
-export interface RoomProps extends WithStyles<typeof styles> {
-  auth: firebase.auth.Auth;
-  database: firebase.database.Database;
-}
+export interface RoomProps extends WithStyles<typeof styles> {}
 
 const Room: React.FC<RoomProps> = (props) => {
-  const { classes, auth, database } = props;
+  const { classes } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [onlineMembers, setOnlineMembers] = useState({});
-
-  useEffect(() => {
-    let ref = database.ref('online');
-    ref.on('value', (ss) => {
-      setOnlineMembers(ss.val());
-    })
-  }, []);
+  const { logout } = useAuth();
+  const history = useHistory();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const onExitHandler = async () => {
-    if (auth.currentUser?.uid) {
-      await database.ref('online/' + auth.currentUser.uid)
-        .remove((e) => {
-          auth.signOut();
-        })
+    try {
+      await logout();
+      history.push('/entry');
+    } catch (e) {
+      console.error(e);
     }
-    window.location.href = '/entry';
   }
 
   return (
@@ -211,20 +201,18 @@ const Room: React.FC<RoomProps> = (props) => {
               variant="temporary"
               open={mobileOpen}
               onClose={handleDrawerToggle}
-              onlineMembers={onlineMembers}
             />
           </Hidden>
           <Hidden xsDown implementation="css">
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
-              onlineMembers={onlineMembers}
             />
           </Hidden>
         </nav>
         <div className={classes.app}>
           <Header onExitHandler={onExitHandler} />
           <main className={classes.main}>
-            <Content onlineMembers={onlineMembers} />
+            <Content />
           </main>
           <footer className={classes.footer}>
             <Copyright />
