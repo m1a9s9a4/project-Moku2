@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import {useAuth} from "../../contexts/AuthContext";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -32,8 +33,9 @@ const styles = (theme: Theme) =>
 
 export interface ContentProps extends WithStyles<typeof styles> {}
 
-function Content(props: ContentProps) {
+const Content: React.FC<ContentProps> = (props) => {
   const { classes } = props;
+  const { onlineMembers } = useAuth();
 
   return (
     <Paper className={classes.paper}>
@@ -46,7 +48,7 @@ function Content(props: ContentProps) {
       </AppBar>
       <div className={classes.contentWrapper}>
         <Typography color="textSecondary" variant="h4" component="p" align="center">
-          10 人
+          {Object.keys(onlineMembers).length} 人
         </Typography>
       </div>
     </Paper>
