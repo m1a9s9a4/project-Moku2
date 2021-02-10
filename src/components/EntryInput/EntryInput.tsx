@@ -8,9 +8,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import GoogleBtn from '../../assets/images/btn_google_signin_dark_normal_web@2x.png';
 
-function Copyright() {
+import {themeColor} from '../../utils/themeColor';
+
+const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
@@ -40,8 +41,12 @@ const styles = (theme: Theme) =>
         marginTop: theme.spacing(1),
       },
       submit: {
-        margin: theme.spacing(3, 0, 2),
-      }
+        margin: theme.spacing(3),
+        backgroundColor: themeColor,
+        color: '#ffffff',
+        width: '100%',
+        fontSize: '20px',
+      },
   });
 
 interface EntryInputProps extends WithStyles<typeof styles> {
@@ -63,10 +68,12 @@ const EntryInput: React.FC<EntryInputProps> = (props) => {
         </Typography>
         <Button
           type="submit"
+          size="large"
+          variant="contained"
           className={classes.submit}
           onClick={onEntryHandler}
         >
-          <img src={GoogleBtn} />
+          Enter with Google
         </Button>
       </div>
       <Box mt={8}>

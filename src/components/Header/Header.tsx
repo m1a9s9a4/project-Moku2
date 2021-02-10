@@ -6,9 +6,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
-const lightColor = 'rgba(255, 255, 255, 0.7)';
+import {themeColor} from '../../utils/themeColor';
 
-const themeColor = '#EB6100';
+const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const styles = (theme: Theme) =>
   createStyles({
