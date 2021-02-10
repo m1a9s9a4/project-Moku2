@@ -5,7 +5,41 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
+
 import {useAuth} from "../../contexts/AuthContext";
+
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      backgroundColor: '#44b700',
+      color: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        animation: '$ripple 1.2s infinite ease-in-out',
+        border: '1px solid currentColor',
+        content: '""',
+      },
+    },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
+  }),
+)(Badge);
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -15,6 +49,7 @@ const styles = (theme: Theme) =>
       overflow: 'hidden',
     },
     searchBar: {
+      backgroundColor: '#e0e0e0',
       borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
     },
     searchInput: {
@@ -29,6 +64,10 @@ const styles = (theme: Theme) =>
     contentWrapper: {
       margin: '40px 16px',
     },
+    icon: {
+      width: theme.spacing(10),
+      height: theme.spacing(10),
+    },
   });
 
 export interface ContentProps extends WithStyles<typeof styles> {}
@@ -41,8 +80,8 @@ const Content: React.FC<ContentProps> = (props) => {
     <Paper className={classes.paper}>
       <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
         <Toolbar>
-          <Grid container spacing={2} alignItems="center">
-            現在のオンラインユーザー数
+          <Grid container spacing={2} alignItems="center" >
+            現在のオンラインユーザー
           </Grid>
         </Toolbar>
       </AppBar>
@@ -50,6 +89,25 @@ const Content: React.FC<ContentProps> = (props) => {
         <Typography color="textSecondary" variant="h4" component="p" align="center">
           {Object.keys(onlineMembers).length} 人
         </Typography>
+        <Grid container spacing={2} justify="center">
+          {Object.keys(onlineMembers).map((key, i) => (
+            <Grid container md={2} justify="center" item key={key}>
+              <StyledBadge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                variant="dot"
+                >
+                <Avatar alt={onlineMembers[key].username} className={classes.icon} >
+                  {onlineMembers[key].username}
+                </Avatar>
+              </StyledBadge>
+            </Grid>
+          ))}
+        </Grid>
+
       </div>
     </Paper>
   );
