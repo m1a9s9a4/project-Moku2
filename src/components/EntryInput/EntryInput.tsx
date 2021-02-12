@@ -10,13 +10,14 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 import Container from '@material-ui/core/Container';
 
 import {themeColor} from '../../utils/themeColor';
+import logo from '../../assets/images/logo.png';
 
 const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="/">
-        Mokux2
+        {process.env.REACT_APP_TITLE}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -26,27 +27,27 @@ const Copyright = () => {
 
 const styles = (theme: Theme) =>
   createStyles({
-      paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      },
-      avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-      },
-      form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-      },
-      submit: {
-        margin: theme.spacing(3),
-        backgroundColor: themeColor,
-        color: '#ffffff',
-        width: '100%',
-        fontSize: '20px',
-      },
+    paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: themeColor,
+    },
+    form: {
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(1),
+    },
+    submit: {
+      margin: theme.spacing(3),
+      backgroundColor: themeColor,
+      color: '#ffffff',
+      width: '100%',
+      fontSize: '20px',
+    },
   });
 
 interface EntryInputProps extends WithStyles<typeof styles> {
@@ -60,11 +61,12 @@ const EntryInput: React.FC<EntryInputProps> = (props) => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <Avatar src={logo} className={classes.avatar} variant="rounded" />
         <Typography component="h1" variant="h5">
-          Mokux2入場
+          {process.env.REACT_APP_TITLE}入場
+        </Typography>
+        <Typography>
+          もくもくを開始しましょう！
         </Typography>
         <Button
           type="submit"

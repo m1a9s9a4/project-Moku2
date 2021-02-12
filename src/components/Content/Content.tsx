@@ -87,7 +87,7 @@ const Content: React.FC<ContentProps> = (props) => {
       </AppBar>
       <div className={classes.contentWrapper}>
         <Typography color="textSecondary" variant="h4" component="p" align="center">
-          {Object.keys(onlineMembers).length} 人
+          {onlineMembers ? Object.keys(onlineMembers).length : '0'} 人
         </Typography>
         <Grid container spacing={2} justify="center">
           {Object.keys(onlineMembers).map((key, i) => (
@@ -101,7 +101,7 @@ const Content: React.FC<ContentProps> = (props) => {
                 variant="dot"
                 >
                 <Avatar alt={onlineMembers[key].username} className={classes.icon} >
-                  {onlineMembers[key].username.slice(0, 1)}
+                  {onlineMembers[key].username.slice(0, 2)}
                 </Avatar>
               </StyledBadge>
             </Grid>
