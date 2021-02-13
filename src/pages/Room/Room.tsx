@@ -16,13 +16,14 @@ import Navigator from '../../components/Navigator/Navigator';
 import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
 import {useAuth} from "../../contexts/AuthContext";
+import ExitBtnContent from "../../components/ExitBtnContent/ExitBtnContent";
 
-function Copyright() {
+const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Mokux2
+        {process.env.REACT_APP_TITLE}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -210,8 +211,9 @@ const Room: React.FC<RoomProps> = (props) => {
           </Hidden>
         </nav>
         <div className={classes.app}>
-          <Header onExitHandler={onExitHandler} />
+          <Header　/>
           <main className={classes.main}>
+            <ExitBtnContent onExitHandler={onExitHandler} />
             <Content />
           </main>
           <footer className={classes.footer}>
