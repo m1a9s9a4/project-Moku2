@@ -17,6 +17,7 @@ import Content from '../../components/Content/Content';
 import Header from '../../components/Header/Header';
 import {useAuth} from "../../contexts/AuthContext";
 import ExitBtnContent from "../../components/ExitBtnContent/ExitBtnContent";
+import ContentTodos from "../../components/Content/Todos/ContentTodos";
 
 const Copyright = () => {
   return (
@@ -213,8 +214,9 @@ const Room: React.FC<RoomProps> = (props) => {
         <div className={classes.app}>
           <Header　/>
           <main className={classes.main}>
-            <ExitBtnContent onExitHandler={onExitHandler} />
+            <ContentTodos />
             <Content />
+            <ExitBtnContent onExitHandler={onExitHandler} />
           </main>
           <footer className={classes.footer}>
             <Copyright />
