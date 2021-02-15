@@ -69,13 +69,13 @@ const ContentTodos: React.FC<ContentProps> = (props) => {
 
   const addTodos = (e) => {
     e.preventDefault();
-    if (!e.target.value) {
+    if (!todo) {
       return;
     }
     setTodos([
       ...todos,
       {
-        text: e.target.value,
+        text: todo,
         done: false,
       }
     ])
@@ -88,6 +88,10 @@ const ContentTodos: React.FC<ContentProps> = (props) => {
   }
 
   const onCheckChangeHandler = (e) => {
+    if (!e.target.checked) {
+      return;
+    }
+
     console.log(todos);
     const tmpTodos = todos.splice(e.target.value, 1);
     console.log(e.target.value);
