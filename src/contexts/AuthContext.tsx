@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
+import { uniqueNamesGenerator, adjectives, animals } from "unique-names-generator";
 
 import fb, { fbAuth, fbDatabase } from '../libraries/firebase';
 
@@ -8,6 +9,7 @@ interface IContext {
   logout;
   online;
   onlineMembers;
+  username;
 }
 
 const AuthContext = React.createContext({} as IContext);
@@ -18,6 +20,7 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC = ({children}) => {
   const [currentUser, setCurrentUser] = useState({});
+  const [username, setUsername] = useState('');
   const [online, setOnline] = useState(false);
   const [onlineMembers, setOnlineMembers] = useState({});
   const [authChecked, setAuthChecked] = useState(false);
@@ -46,32 +49,39 @@ export const AuthProvider: React.FC = ({children}) => {
       }
 
       let ref = fbDatabase.ref('/online' + fbAuth.currentUser!.uid);
-      let action;
       if (! snapshot.val()) {
-        action = (async () => {
+        (async () => {
           await ref.onDisconnect().remove(e => {
             setOnline(false);
           });
-        });
+        })();
+        return;
       }
-      // else {
-      //   if (! online)　{
-      //     action = (async() => {
-      //       await ref.set({
-      //         last_change: fb.database.ServerValue.TIMESTAMP,
-      //         username: fbAuth.currentUser!.uid.toLowerCase().slice(0, 5),
-      //       }).then(() => {
-      //         setOnline(true);
-      //       });
-      //     });
-      //   }
-      // }
 
-      return () => {
-        action()
-      }
+      ref.on('value', (isOnline) => {
+        if (!isOnline) {
+          (async() => {
+            await ref.set({
+              last_change: fb.database.ServerValue.TIMESTAMP,
+              username: fbAuth.currentUser!.uid.toLowerCase().slice(0, 5),
+            }).then(() => {
+              setOnline(true);
+            });
+          })();
+        }
+      })
     });
   }, [])
+
+  useEffect(() => {
+    if (fbAuth.currentUser && fbAuth.currentUser.uid) {
+      fbDatabase.ref('/username/' + fbAuth.currentUser.uid).once('value')
+        .then((snapshot) => {
+          const name = snapshot.val() ? snapshot.val().username : '';
+          setUsername(name);
+        })
+    }
+  })
 
 
   const login = async () => {
@@ -86,9 +96,26 @@ export const AuthProvider: React.FC = ({children}) => {
       })
 
     if (user) {
+      let username = '';
+      await fbDatabase.ref('/username/' + user.uid).once('value')
+        .then((snapshot) => {
+          username = snapshot.val() ? snapshot.val().username : '';
+        })
+      if (!username) {
+        username = uniqueNamesGenerator({
+          dictionaries: [adjectives, animals],
+          separator: '-',
+        });
+        await fbDatabase.ref('/username/' + user.uid).set({
+          username: username
+        })
+      }
+
+      setUsername(username);
+
       await fbDatabase.ref('/online/'+user.uid).set({
         last_change: fb.database.ServerValue.TIMESTAMP,
-        username: user.uid.toLocaleLowerCase().slice(0, 5),
+        username: username,
       });
 
       setCurrentUser(user);
@@ -110,6 +137,7 @@ export const AuthProvider: React.FC = ({children}) => {
     logout,
     online,
     onlineMembers,
+    username,
   };
 
   return (
