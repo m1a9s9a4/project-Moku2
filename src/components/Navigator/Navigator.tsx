@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Drawer, { DrawerProps } from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import PersonIcon from '@material-ui/icons/Person';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -12,7 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 
 import {useAuth} from '../../contexts/AuthContext';
-import Grid from "@material-ui/core/Grid";
+import logo from '../../assets/images/logo_title.png';
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -85,6 +84,10 @@ const styles = (theme: Theme) =>
     divider: {
       marginTop: theme.spacing(2),
     },
+    logo: {
+      width: '100%',
+      height: '100%',
+    }
   });
 
 
@@ -92,13 +95,13 @@ export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles
 
 const Navigator: React.FC<NavigatorProps> = (props) => {
   const {classes, ...other} = props;
-  const {onlineMembers} = useAuth();
+  const {onlineMembers, username} = useAuth();
 
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
-          Mokux2
+          <Avatar variant="square" src={logo} className={classes.logo} />
         </ListItem>
         <ListItem className={classes.categoryHeader}>
           <ListItemText
@@ -134,7 +137,7 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
                 primary: classes.itemPrimary,
               }}
             >
-              {onlineMembers[key].username} さん
+              {onlineMembers[key].username === username ? 'あなた' : onlineMembers[key].username}
             </ListItemText>
           </ListItem>
         ))}
