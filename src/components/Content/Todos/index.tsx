@@ -7,46 +7,13 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import {ListItem, ListItemIcon, ListItemText, TextField} from "@material-ui/core";
 import List from "@material-ui/core/List";
 import Checkbox from '@material-ui/core/Checkbox';
 
-
-
-const styles = (theme: Theme) =>
-  createStyles({
-    paper: {
-      maxWidth: 936,
-      margin: 'auto',
-      overflow: 'hidden',
-    },
-    searchBar: {
-      backgroundColor: '#e0e0e0',
-      borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-    },
-    searchInput: {
-      backgroundColor: '#FFFFFF',
-      padding: '2px 5px',
-      borderRadius: '5px',
-      fontSize: theme.typography.fontSize,
-    },
-    block: {
-      display: 'block',
-    },
-    addUser: {
-      marginRight: theme.spacing(1),
-    },
-    contentWrapper: {
-      margin: '40px 16px',
-    },
-    icon: {
-      width: theme.spacing(10),
-      height: theme.spacing(10),
-    },
-  });
+import { contentStyles as styles } from "../../../assets/styles";
 
 export interface ContentProps extends WithStyles<typeof styles> {}
 
@@ -55,7 +22,7 @@ interface ITodo {
   done: boolean;
 }
 
-const ContentTodos: React.FC<ContentProps> = (props) => {
+const Index: React.FC<ContentProps> = (props) => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [todo, setTodo] = useState('');
   const { classes } = props;
@@ -92,20 +59,9 @@ const ContentTodos: React.FC<ContentProps> = (props) => {
       return;
     }
 
-    console.log(todos);
-    const tmpTodos = todos.splice(e.target.value, 1);
-    console.log(e.target.value);
-    console.log(tmpTodos.length);
-    console.log(tmpTodos);
-    if (!tmpTodos.length) {
-      console.log('in');
-      console.log(todos);
-      setTodos([]);
-      return;
-    }
-    console.log('out');
-    console.log(todos);
-    setTodos(tmpTodos);
+    setTodos(todos.filter((todo, key) => {
+      return e.target.value !== key.toString();
+    }));
   }
 
   return (
@@ -134,11 +90,9 @@ const ContentTodos: React.FC<ContentProps> = (props) => {
               <Button variant="contained" color="primary" className={classes.addUser} onClick={addTodos}>
                 追加
               </Button>
-              <Tooltip title="Reload">
-                <IconButton>
-                  <RefreshIcon className={classes.block} color="inherit" />
-                </IconButton>
-              </Tooltip>
+              <IconButton>
+                <FileCopyIcon className={classes.block} color="inherit" />
+              </IconButton>
             </Grid>
           </Grid>
         </Toolbar>
@@ -156,6 +110,7 @@ const ContentTodos: React.FC<ContentProps> = (props) => {
                     edge="start"
                     value={i}
                     onChange={onCheckChangeHandler}
+                    checked={todo.done}
                   />
                 </ListItemIcon>
                 <ListItemText primary={todo.text} />
@@ -168,4 +123,4 @@ const ContentTodos: React.FC<ContentProps> = (props) => {
   );
 }
 
-export default withStyles(styles)(ContentTodos);
+export default withStyles(styles)(Index);

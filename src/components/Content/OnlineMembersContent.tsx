@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 
 import {useAuth} from "../../contexts/AuthContext";
+import { contentStyles as styles } from "../../assets/styles";
 
 const StyledBadge = withStyles((theme: Theme) =>
   createStyles({
@@ -41,38 +42,9 @@ const StyledBadge = withStyles((theme: Theme) =>
   }),
 )(Badge);
 
-const styles = (theme: Theme) =>
-  createStyles({
-    paper: {
-      maxWidth: 936,
-      margin: 'auto',
-      overflow: 'hidden',
-    },
-    searchBar: {
-      backgroundColor: '#e0e0e0',
-      borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-    },
-    searchInput: {
-      fontSize: theme.typography.fontSize,
-    },
-    block: {
-      display: 'block',
-    },
-    addUser: {
-      marginRight: theme.spacing(1),
-    },
-    contentWrapper: {
-      margin: '40px 16px',
-    },
-    icon: {
-      width: theme.spacing(10),
-      height: theme.spacing(10),
-    },
-  });
-
 export interface ContentProps extends WithStyles<typeof styles> {}
 
-const Content: React.FC<ContentProps> = (props) => {
+const OnlineMembersContent: React.FC<ContentProps> = (props) => {
   const { classes } = props;
   const { onlineMembers } = useAuth();
 
@@ -113,4 +85,4 @@ const Content: React.FC<ContentProps> = (props) => {
   );
 }
 
-export default withStyles(styles)(Content);
+export default withStyles(styles)(OnlineMembersContent);
