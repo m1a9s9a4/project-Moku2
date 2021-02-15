@@ -1,14 +1,12 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
-import {themeColor} from '../../utils/themeColor';
-
-const lightColor = 'rgba(255, 255, 255, 0.7)';
+import {themeColor, lightColor} from '../../utils/themeColor';
+import {useAuth} from "../../contexts/AuthContext";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -18,6 +16,7 @@ const styles = (theme: Theme) =>
     secondaryBar: {
       backgroundColor: themeColor,
       zIndex: 0,
+      paddingTop: '15px',
     },
     menuButton: {
       marginLeft: -theme.spacing(1),
@@ -35,20 +34,22 @@ const styles = (theme: Theme) =>
     button: {
       borderColor: lightColor,
     },
+    appTitle: {
+      fontFamily: 'Borsok',
+      fontWeight: 900,
+      fontSize: '30px',
+    }
   });
 
 interface HeaderProps extends WithStyles<typeof styles> {
-  onExitHandler: () => void;
 }
 
-function Header(props: HeaderProps) {
-  const { classes, onExitHandler } = props;
+const Header = (props: HeaderProps) => {
+  const { classes } = props;
+  const {username} = useAuth();
 
   return (
     <React.Fragment>
-      <AppBar color="primary" position="sticky" elevation={0} className={classes.header}>
-        <Toolbar />
-      </AppBar>
       <AppBar
         component="div"
         className={classes.secondaryBar}
@@ -60,13 +61,9 @@ function Header(props: HeaderProps) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                「Mokux2」にようこそ！今日もがんばっていきましょう！
+                <span className={classes.appTitle}>{process.env.REACT_APP_TITLE}</span>
+                にようこそ！今日の作業も頑張りましょう！
               </Typography>
-            </Grid>
-            <Grid item>
-              <Button className={classes.button} variant="outlined" color="inherit" size="small" onClick={onExitHandler}>
-                退出する
-              </Button>
             </Grid>
           </Grid>
         </Toolbar>
@@ -82,7 +79,7 @@ function Header(props: HeaderProps) {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" >
-                「Mokux2」はオンライン上で不特定多数と「もくもく会」をする場所を提供し、他の頑張っている人を見てモチベーションを生むきっかけを作ります。<br />
+                「{process.env.REACT_APP_TITLE}」はオンライン上で不特定多数と「もくもく会」をする場所を提供し、他の頑張っている人を見てモチベーションを生むきっかけを作ります。<br />
               </Typography>
             </Grid>
           </Grid>
