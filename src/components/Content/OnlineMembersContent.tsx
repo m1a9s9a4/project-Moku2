@@ -63,7 +63,7 @@ const OnlineMembersContent: React.FC<ContentProps> = (props) => {
         </Typography>
         <Grid container spacing={2} justify="center">
           {Object.keys(onlineMembers).map((key, i) => (
-            <Grid container md={2} justify="center" item key={key}>
+            <Grid container md={2} xs={3} justify="center" item key={key}>
               <StyledBadge
                 overlap="circle"
                 anchorOrigin={{
