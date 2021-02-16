@@ -10,6 +10,11 @@ interface IContext {
   online;
   onlineMembers;
   username;
+  todos;
+  addTodo;
+  removeTodo;
+  doneTodo;
+  doneTodos;
 }
 
 const AuthContext = React.createContext({} as IContext);
@@ -24,6 +29,8 @@ export const AuthProvider: React.FC = ({children}) => {
   const [online, setOnline] = useState(false);
   const [onlineMembers, setOnlineMembers] = useState({});
   const [authChecked, setAuthChecked] = useState(false);
+  const [todos, setTodos] = useState({});
+  const [doneTodos, setDoneTodos] = useState({});
 
   useEffect(() => {
     fbAuth.onAuthStateChanged(user => {
@@ -31,10 +38,20 @@ export const AuthProvider: React.FC = ({children}) => {
         setCurrentUser(user);
         setOnline(true);
       }
+      if (fbAuth.currentUser) {
+        fbDatabase.ref('/todos/' + fbAuth.currentUser.uid).on('value', (snapshot) => {
+          setTodos(snapshot.val());
+        })
+
+        fbDatabase.ref('/todos/done/' + fbAuth.currentUser.uid).on('value', (ss) => {
+          setDoneTodos(ss.val());
+        })
+      }
 
       setAuthChecked(true);
     })
   }, []);
+
 
   useEffect(() => {
     fbDatabase.ref('/online/').on('value', (snapshot) => {
@@ -131,6 +148,30 @@ export const AuthProvider: React.FC = ({children}) => {
     }
   }
 
+  const addTodo = async (text) => {
+    if (fbAuth.currentUser) {
+      await fbDatabase.ref('/todos/' + fbAuth.currentUser.uid).push({
+        text,
+        created: fb.database.ServerValue.TIMESTAMP,
+      });
+    }
+  }
+
+  const removeTodo = async (id) => {
+    if (fbAuth.currentUser) {
+      await fbDatabase.ref('/todos/' + fbAuth.currentUser.uid + "/" + id).remove();
+    }
+  }
+
+  const doneTodo = async (text) => {
+    if (fbAuth.currentUser) {
+      await fbDatabase.ref('/todos/done/' + fbAuth.currentUser.uid).push({
+        text,
+        created: fb.database.ServerValue.TIMESTAMP,
+      })
+    }
+  }
+
   const value = {
     currentUser,
     login,
@@ -138,6 +179,11 @@ export const AuthProvider: React.FC = ({children}) => {
     online,
     onlineMembers,
     username,
+    todos,
+    addTodo,
+    removeTodo,
+    doneTodo,
+    doneTodos,
   };
 
   return (
