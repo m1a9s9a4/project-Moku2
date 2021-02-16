@@ -4,7 +4,7 @@ import {useAuth} from "../../contexts/AuthContext";
 import {useHistory} from 'react-router-dom';
 
 const Entry: React.FC = () => {
-  const {login} = useAuth();
+  const {login, logout} = useAuth();
   const history = useHistory();
 
   const onEntryHandler = async () => {
@@ -12,6 +12,7 @@ const Entry: React.FC = () => {
       await login();
       history.push('/');
     } catch (e) {
+      await logout();
       console.error('failed to login');
     }
   }
