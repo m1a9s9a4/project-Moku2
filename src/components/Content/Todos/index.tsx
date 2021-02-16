@@ -14,6 +14,7 @@ import List from "@material-ui/core/List";
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { contentStyles as styles } from "../../../assets/styles";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export interface ContentProps extends WithStyles<typeof styles> {}
 
@@ -23,8 +24,8 @@ interface ITodo {
 }
 
 const Index: React.FC<ContentProps> = (props) => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
   const [todo, setTodo] = useState('');
+  const { addTodo, removeTodo, doneTodo, todos } = useAuth();
   const { classes } = props;
 
   const onKeyupHandler = (e) => {
@@ -39,13 +40,7 @@ const Index: React.FC<ContentProps> = (props) => {
     if (!todo) {
       return;
     }
-    setTodos([
-      ...todos,
-      {
-        text: todo,
-        done: false,
-      }
-    ])
+    addTodo(todo);
     setTodo('');
   }
 
@@ -55,13 +50,10 @@ const Index: React.FC<ContentProps> = (props) => {
   }
 
   const onCheckChangeHandler = (e) => {
-    if (!e.target.checked) {
-      return;
+    if (e.target.value) {
+      removeTodo(e.target.value);
+      doneTodo(todos[e.target.value].text);
     }
-
-    setTodos(todos.filter((todo, key) => {
-      return e.target.value !== key.toString();
-    }));
   }
 
   return (
@@ -99,24 +91,29 @@ const Index: React.FC<ContentProps> = (props) => {
       </AppBar>
       <div className={classes.contentWrapper}>
         <Typography color="textSecondary" variant="h6" component="p" align="center">
-          残 {todos ? todos.length : '0'} タスク
+          残 {todos ? Object.keys(todos).length : '0'} タスク
         </Typography>
         <List>
-          {todos.map((todo, i) => {
-            return (
-              <ListItem key={i}>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    value={i}
-                    onChange={onCheckChangeHandler}
-                    checked={todo.done}
-                  />
-                </ListItemIcon>
-                <ListItemText primary={todo.text} />
-              </ListItem>
-            )
-          })}
+          {todos ? (
+            Object.keys(todos).map((key, i) => {
+                return (
+                  <ListItem key={i}>
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        value={key}
+                        onChange={onCheckChangeHandler}
+                        checked={todos[key].done}
+                      />
+                    </ListItemIcon>
+                    <ListItemText primary={todos[key].text} />
+                  </ListItem>
+                )
+            })
+          ): (
+            <ListItem>まだタスクの登録がありません</ListItem>
+          )}
+
         </List>
       </div>
     </Paper>
