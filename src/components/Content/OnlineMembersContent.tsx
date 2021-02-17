@@ -62,7 +62,7 @@ const OnlineMembersContent: React.FC<ContentProps> = (props) => {
           {onlineMembers ? Object.keys(onlineMembers).length : '0'} 人
         </Typography>
         <Grid container spacing={2} justify="center">
-          {Object.keys(onlineMembers).map((key, i) => (
+          {onlineMembers ? Object.keys(onlineMembers).map((key, i) => (
             <Grid container md={2} xs={3} justify="center" item key={key}>
               <StyledBadge
                 overlap="circle"
@@ -77,7 +77,9 @@ const OnlineMembersContent: React.FC<ContentProps> = (props) => {
                 </Avatar>
               </StyledBadge>
             </Grid>
-          ))}
+          )) : (
+            <Grid container justify="center">オンラインメンバーはいません</Grid>
+          )}
         </Grid>
 
       </div>
