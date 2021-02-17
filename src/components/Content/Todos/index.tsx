@@ -103,7 +103,7 @@ const Index: React.FC<ContentProps> = (props) => {
                         edge="start"
                         value={key}
                         onChange={onCheckChangeHandler}
-                        checked={todos[key].done}
+                        checked={false}
                       />
                     </ListItemIcon>
                     <ListItemText primary={todos[key].text} />
@@ -113,7 +113,6 @@ const Index: React.FC<ContentProps> = (props) => {
           ): (
             <ListItem>まだタスクの登録がありません</ListItem>
           )}
-
         </List>
       </div>
     </Paper>
