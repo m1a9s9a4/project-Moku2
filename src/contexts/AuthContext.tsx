@@ -100,7 +100,6 @@ export const AuthProvider: React.FC = ({children}) => {
     }
   })
 
-
   const login = async () => {
     const provider = new fb.auth.GoogleAuthProvider();
     const user = await fbAuth.signInWithPopup(provider)
@@ -108,31 +107,32 @@ export const AuthProvider: React.FC = ({children}) => {
         return user;
       })
       .catch((e) => {
-        console.error(e);
         return null;
-      })
+      });
 
     if (user) {
-      let username = '';
-      await fbDatabase.ref('/username/' + user.uid).once('value')
+      const exists = await fbDatabase.ref('/username/' + user.uid).once('value')
         .then((snapshot) => {
-          username = snapshot.val() ? snapshot.val().username : '';
-        })
-      if (!username) {
-        username = uniqueNamesGenerator({
+          return !!snapshot.val();
+        });
+
+      if (!exists) {
+        const newUsername = uniqueNamesGenerator({
           dictionaries: [adjectives, animals],
           separator: '-',
         });
+        await user.updateProfile({
+          displayName: newUsername,
+        })
         await fbDatabase.ref('/username/' + user.uid).set({
-          username: username
+          username: newUsername,
         })
       }
 
-      setUsername(username);
-
-      await fbDatabase.ref('/online/'+user.uid).set({
+      setUsername(user.displayName!);
+      await fbDatabase.ref('/online/' + user.uid).set({
         last_change: fb.database.ServerValue.TIMESTAMP,
-        username: username,
+        username: user.displayName,
       });
 
       setCurrentUser(user);
