@@ -7,6 +7,7 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 
 import {themeColor, lightColor} from '../../utils/themeColor';
 import {useAuth} from "../../contexts/AuthContext";
+import {Tab, Tabs} from "@material-ui/core";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -42,11 +43,16 @@ const styles = (theme: Theme) =>
   });
 
 interface HeaderProps extends WithStyles<typeof styles> {
+  setTab: (tab: number) => void;
+  tab: number;
 }
 
 const Header = (props: HeaderProps) => {
-  const { classes } = props;
-  const {username} = useAuth();
+  const { setTab, tab, classes } = props;
+
+  const onChangeHandler = (e: React.ChangeEvent<{}>, newVal: number) => {
+    setTab(newVal);
+  }
 
   return (
     <React.Fragment>
@@ -84,6 +90,18 @@ const Header = (props: HeaderProps) => {
             </Grid>
           </Grid>
         </Toolbar>
+      </AppBar>
+      <AppBar
+        component="div"
+        className={classes.secondaryBar}
+        color="primary"
+        position="static"
+        elevation={0}
+      >
+        <Tabs value={tab} textColor="inherit" onChange={onChangeHandler}>
+          <Tab textColor="inherit" label="トップ" />
+          <Tab textColor="inherit" label="完了タスク一覧" />
+        </Tabs>
       </AppBar>
     </React.Fragment>
   );
