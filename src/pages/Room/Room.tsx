@@ -18,6 +18,7 @@ import Header from '../../components/Header/Header';
 import {useAuth} from "../../contexts/AuthContext";
 import ExitBtnContent from "../../components/Content/ExitBtnContent";
 import TodosContent from "../../components/Content/Todos";
+import DoneTodoContent from '../../components/Content/Todos/Done';
 
 const Copyright = () => {
   return (
@@ -175,6 +176,7 @@ export interface RoomProps extends WithStyles<typeof styles> {}
 
 const Room: React.FC<RoomProps> = (props) => {
   const { classes } = props;
+  const [tab, setTab] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useAuth();
   const history = useHistory();
@@ -212,11 +214,16 @@ const Room: React.FC<RoomProps> = (props) => {
           </Hidden>
         </nav>
         <div className={classes.app}>
-          <Header　/>
+          <Header setTab={setTab} tab={tab}　/>
           <main className={classes.main}>
-            <TodosContent />
-            <Content />
-            <ExitBtnContent onExitHandler={onExitHandler} />
+            <div hidden={tab !== 0} >
+              <TodosContent />
+              <Content />
+              <ExitBtnContent onExitHandler={onExitHandler} />
+            </div>
+            <div hidden={tab !== 1}>
+              <DoneTodoContent />
+            </div>
           </main>
           <footer className={classes.footer}>
             <Copyright />
