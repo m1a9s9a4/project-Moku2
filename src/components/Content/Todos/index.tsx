@@ -23,7 +23,7 @@ interface ITodo {
   done: boolean;
 }
 
-const Index: React.FC<ContentProps> = (props) => {
+const Main: React.FC<ContentProps> = (props) => {
   const [todo, setTodo] = useState('');
   const { addTodo, removeTodo, doneTodo, todos } = useAuth();
   const { classes } = props;
@@ -119,4 +119,4 @@ const Index: React.FC<ContentProps> = (props) => {
   );
 }
 
-export default withStyles(styles)(Index);
+export default withStyles(styles)(Main);
