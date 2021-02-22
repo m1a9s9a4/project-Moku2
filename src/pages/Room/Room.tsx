@@ -19,13 +19,14 @@ import {useAuth} from "../../contexts/AuthContext";
 import ExitBtnContent from "../../components/Content/ExitBtnContent";
 import TodosContent from "../../components/Content/Todos";
 import DoneTodoContent from '../../components/Content/Todos/Done';
+import {appConfig} from "../../config";
 
 const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        {process.env.REACT_APP_TITLE}
+        {appConfig.title}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

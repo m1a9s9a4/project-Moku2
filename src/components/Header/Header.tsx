@@ -6,8 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 
 import {themeColor, lightColor} from '../../utils/themeColor';
-import {useAuth} from "../../contexts/AuthContext";
 import {Tab, Tabs} from "@material-ui/core";
+import { appConfig } from '../../config';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -67,7 +67,7 @@ const Header = (props: HeaderProps) => {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                <span className={classes.appTitle}>{process.env.REACT_APP_TITLE}</span>
+                <span className={classes.appTitle}>{appConfig.title}</span>
                 にようこそ！今日の作業も頑張りましょう！
               </Typography>
             </Grid>
@@ -85,7 +85,7 @@ const Header = (props: HeaderProps) => {
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" >
-                「{process.env.REACT_APP_TITLE}」はオンライン上で不特定多数と「もくもく会」をする場所を提供し、他の頑張っている人を見てモチベーションを生むきっかけを作ります。<br />
+                「{appConfig.title}」はオンライン上で不特定多数と「もくもく会」をする場所を提供し、他の頑張っている人を見てモチベーションを生むきっかけを作ります。<br />
               </Typography>
             </Grid>
           </Grid>

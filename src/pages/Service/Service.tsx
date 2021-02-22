@@ -8,6 +8,7 @@ import FirstView from '../../assets/images/firstView.png';
 import WhatIsMoku from '../../assets/images/whatIsMoku.png';
 import Logo from '../../assets/images/logo.png';
 import WhatFeatures from '../../assets/images/whatFeatures.png';
+import {appConfig} from "../../config";
 
 const useStyles = makeStyles({
   topWrapper: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles({
   },
   heading: {
     width: '300px',
-    margin: 'auto',
+    margin: '20px auto',
     display: 'block',
   },
   registerBtnWrapper: {
@@ -61,14 +62,14 @@ const Service: React.FC = () => {
   return (
     <div>
       <header className={classes.appHeader}>
-        <img src={Icon} alt={process.env.REACT_APP_TITLE} className={classes.image} />
+        <img src={Icon} alt={appConfig.title} className={classes.image} />
       </header>
       <div className={classes.firstView}>
         <img src={FirstView} className={classes.firstViewImage} alt='first view image' />
       </div>
       <Container className={classes.topWrapper}>
         <div className={classes.registerBtnWrapper} >
-          <Button variant="contained" className={classes.registerBtn}>つかってみる</Button>
+          <Button variant="contained" className={classes.registerBtn}>入場する</Button>
         </div>
         <div className={classes.whatIsMokuWrapper}>
           <img src={WhatIsMoku} className={classes.heading} alt='what is moku image' />

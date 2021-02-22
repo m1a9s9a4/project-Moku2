@@ -4,20 +4,20 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import {themeColor} from '../../utils/themeColor';
 import logo from '../../assets/images/logo.png';
+import { appConfig } from '../../config';
 
 const Copyright = () => {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="/">
-        {process.env.REACT_APP_TITLE}
+        {appConfig.title}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -63,7 +63,7 @@ const EntryInput: React.FC<EntryInputProps> = (props) => {
       <div className={classes.paper}>
         <Avatar src={logo} className={classes.avatar} variant="rounded" />
         <Typography component="h1" variant="h5">
-          {process.env.REACT_APP_TITLE}入場
+          {appConfig.title}入場
         </Typography>
         <Typography>
           もくもくを開始しましょう！
