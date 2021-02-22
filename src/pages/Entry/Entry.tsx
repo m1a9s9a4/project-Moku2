@@ -10,7 +10,7 @@ const Entry: React.FC = () => {
   const onEntryHandler = async () => {
     try {
       await login();
-      history.push('/');
+      history.push('/room');
     } catch (e) {
       await logout();
       console.error('failed to login');

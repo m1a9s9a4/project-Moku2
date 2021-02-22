@@ -15,9 +15,10 @@ const App: React.FC = () => {
       <Router>
         <AuthProvider>
           <Switch>
-            <PrivateRoute exact path="/" component={Room} />
+            <PrivateRoute exact path="/room" component={Room} />
             <Route path="/entry" component={Entry} />
-            <Route path="/service" component={Service} />
+            <Route exact path="/" component={Service} />
+            <Route exact path="/service" component={Service} />
           </Switch>
         </AuthProvider>
       </Router>
