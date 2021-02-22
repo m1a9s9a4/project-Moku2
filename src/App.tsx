@@ -6,6 +6,7 @@ import './assets/reset.css';
 import Entry from './pages/Entry/Entry';
 import Service from './pages/Service/Service';
 import Room from './pages/Room/Room';
+import Entrance from './pages/Entrance';
 import {AuthProvider} from "./contexts/AuthContext";
 import PrivateRoute from "./components/Routes/PrivateRoute";
 
@@ -15,10 +16,11 @@ const App: React.FC = () => {
       <Router>
         <AuthProvider>
           <Switch>
-            <PrivateRoute exact path="/room" component={Room} />
+            <PrivateRoute exact path="/" component={Room} />
+            <PrivateRoute path="/room" component={Room} />
+            <PrivateRoute path="/entrance" component={Entrance} />
             <Route path="/entry" component={Entry} />
-            <Route exact path="/" component={Service} />
-            <Route exact path="/service" component={Service} />
+            <Route path="/service" component={Service} />
           </Switch>
         </AuthProvider>
       </Router>
