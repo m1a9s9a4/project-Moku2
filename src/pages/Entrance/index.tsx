@@ -1,16 +1,19 @@
 import React from 'react';
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import {createStyles, Theme, useTheme, WithStyles, withStyles} from "@material-ui/core/styles";
-import {Card, CardContent, CardMedia} from "@material-ui/core";
+import {createStyles, Theme, WithStyles, withStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import MeetingRoomOutlinedIcon from '@material-ui/icons/MeetingRoomOutlined';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {blueColor, themeColor} from "../../utils/themeColor";
 import {useAuth} from "../../contexts/AuthContext";
-import AppImage from '../../assets/images/logo_full.png'
 import Icon from "../../assets/images/logo_title.png";
 import {appConfig} from "../../config";
+import {useHistory} from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import AvatarList from "./AvatarList";
+import Logo from '../../assets/images/logo.png';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -19,7 +22,6 @@ const styles = (theme: Theme) =>
       margin: 'auto',
       border: '1px solid #D9D9D9',
       marginTop: 50,
-      height: 200,
       maxWidth: 420,
     },
     details: {
@@ -39,21 +41,24 @@ const styles = (theme: Theme) =>
     controls: {
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(3)
-      // paddingLeft: theme.spacing(1),
-      // paddingRight: theme.spacing(1),
-      // paddingBottom: theme.spacing(1),
+      width: 220,
+      paddingLeft: theme.spacing(2),
+      paddingBottom: theme.spacing(3),
     },
     entryButton: {
       backgroundColor: themeColor,
       color: '#ffffff',
       width: '100%',
+      height: 100,
+      fontSize: '25px',
+      fontWeight: 800,
     },
     image: {
       position: 'relative',
       height: '50px',
       margin: 'auto',
       display: 'block',
+
     },
     appHeader: {
       backgroundColor: blueColor,
@@ -61,14 +66,47 @@ const styles = (theme: Theme) =>
       color: '#ffffff',
       position: 'relative',
     },
+    exitBtn: {
+      width: '100%',
+      height: 50,
+      fontSize: '20px',
+      fontWeight: 800,
+    },
+    wrapper: {
+      marginTop: 50,
+      maxWidth: 420,
+      margin: 'auto',
+    },
+    pageTitle: {
+      color: themeColor,
+      fontWeight: 900,
+    },
+    logoImage: {
+      width: 50,
+      borderRadius: 50,
+    },
 })
 
 interface IEntranceProps extends WithStyles<typeof styles> {}
 
-const Main: React.FC<IEntranceProps> = (props) => {
+const Entrance: React.FC<IEntranceProps> = (props) => {
   const { classes } = props;
-  const {onlineMembers} = useAuth();
-  const theme = useTheme();
+  const {onlineMembers, logout, toOnline } = useAuth();
+  const history = useHistory();
+
+  const onEntryHandler = async () => {
+    await toOnline();
+    history.push('/room')
+  }
+
+  const onExitHandler = async () => {
+    try {
+      await logout();
+      history.push('/entry');
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <>
@@ -76,33 +114,44 @@ const Main: React.FC<IEntranceProps> = (props) => {
         <img src={Icon} alt={appConfig.title} className={classes.image} />
       </header>
       <Container component="main">
-        <Card className={classes.root}>
-          <div className={classes.details}>
-            <CardContent className={classes.content}>
-              <Typography component="h5" variant="h5">
-                {onlineMembers ? (
-                  <span>{Object.keys(onlineMembers).length}人が作業中...</span>
-                ): (
-                  <span>まだ誰もオンラインになっていません。最初のユーザーになりましょう！</span>
-                )}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {appConfig.title}
-              </Typography>
-            </CardContent>
-            <div className={classes.controls}>
-              <Button variant="contained" className={classes.entryButton}>入室する<MeetingRoomOutlinedIcon /></Button>
-            </div>
-          </div>
-          <CardMedia
-            className={classes.cover}
-            image={AppImage}
-            title="Entrance"
-          />
-        </Card>
+        <Grid container justify="center" style={{marginTop: 50}}>
+          <Typography component="h2" variant="h2" align="center">
+            ようこそ<br />
+            <span className={classes.pageTitle}>{appConfig.title}</span>へ
+            <img src={Logo} alt={appConfig.title} className={classes.logoImage} />
+          </Typography>
+        </Grid>
+        <Grid container spacing={2} justify="center" className={classes.wrapper}>
+          <Grid container justify="center" item>
+            <Typography component="h5" variant="h5">
+              {onlineMembers ? (
+                <span>{Object.keys(onlineMembers).length}人がもくもく中...</span>
+              ): (
+                <span>今は誰もオンラインではありません</span>
+              )}
+            </Typography>
+          </Grid>
+          <Grid container justify="center" item>
+            <AvatarList onlineMembers={onlineMembers} />
+          </Grid>
+        </Grid>
+        <Grid container justify="center" className={classes.wrapper}>
+          <Button
+            variant="contained"
+            className={classes.entryButton}
+            onClick={onEntryHandler}
+          >
+            入室する<MeetingRoomOutlinedIcon />
+          </Button>
+        </Grid>
+        <Grid container justify="center" className={classes.wrapper}>
+          <Button className={classes.exitBtn} variant="contained" onClick={onExitHandler} >
+            ログアウト<ExitToAppIcon />
+          </Button>
+        </Grid>
       </Container>
     </>
   )
 }
 
-export default withStyles(styles)(Main);
+export default withStyles(styles)(Entrance);
