@@ -179,7 +179,7 @@ const Room: React.FC<RoomProps> = (props) => {
   const { classes } = props;
   const [tab, setTab] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { logout } = useAuth();
+  const { toOffline } = useAuth();
   const history = useHistory();
 
   const handleDrawerToggle = () => {
@@ -188,8 +188,8 @@ const Room: React.FC<RoomProps> = (props) => {
 
   const onExitHandler = async () => {
     try {
-      await logout();
-      history.push('/entry');
+      await toOffline();
+      history.push('/entrance');
     } catch (e) {
       console.error(e);
     }
