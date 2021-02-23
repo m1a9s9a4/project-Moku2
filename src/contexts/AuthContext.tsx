@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import { uniqueNamesGenerator, adjectives, animals } from "unique-names-generator";
 
 import fb, { fbAuth, fbDatabase } from '../libraries/firebase';
+import {useHistory} from "react-router-dom";
 
 interface IContext {
   currentUser;
@@ -15,6 +16,8 @@ interface IContext {
   removeTodo;
   doneTodo;
   doneTodos;
+  toOffline;
+  toOnline;
 }
 
 const AuthContext = React.createContext({} as IContext);
@@ -31,6 +34,7 @@ export const AuthProvider: React.FC = ({children}) => {
   const [authChecked, setAuthChecked] = useState(false);
   const [todos, setTodos] = useState({});
   const [doneTodos, setDoneTodos] = useState({});
+  const history = useHistory();
 
   useEffect(() => {
     fbAuth.onAuthStateChanged(user => {
@@ -57,38 +61,8 @@ export const AuthProvider: React.FC = ({children}) => {
     fbDatabase.ref('/online/').on('value', (snapshot) => {
       setOnlineMembers(snapshot.val());
     });
-  }, [])
+  }, []);
 
-  useEffect(() => {
-    fbDatabase.ref('.info/connected').on('value', (snapshot) => {
-      if (! fbAuth.currentUser || ! fbAuth.currentUser.uid) {
-        return;
-      }
-
-      let ref = fbDatabase.ref('/online' + fbAuth.currentUser!.uid);
-      if (! snapshot.val()) {
-        (async () => {
-          await ref.onDisconnect().remove(e => {
-            setOnline(false);
-          });
-        })();
-        return;
-      }
-
-      ref.on('value', (isOnline) => {
-        if (!isOnline) {
-          (async() => {
-            await ref.set({
-              last_change: fb.database.ServerValue.TIMESTAMP,
-              username: fbAuth.currentUser!.uid.toLowerCase().slice(0, 5),
-            }).then(() => {
-              setOnline(true);
-            });
-          })();
-        }
-      })
-    });
-  }, [])
 
   useEffect(() => {
     if (fbAuth.currentUser && fbAuth.currentUser.uid) {
@@ -130,11 +104,6 @@ export const AuthProvider: React.FC = ({children}) => {
       }
 
       setUsername(user.displayName!);
-      await fbDatabase.ref('/online/' + user.uid).set({
-        last_change: fb.database.ServerValue.TIMESTAMP,
-        username: user.displayName,
-      });
-
       setCurrentUser(user);
     }
   }
@@ -172,6 +141,33 @@ export const AuthProvider: React.FC = ({children}) => {
     }
   }
 
+  const toOffline = async () => {
+    if (fbAuth.currentUser) {
+      await fbDatabase.ref('/online/' + fbAuth.currentUser.uid).remove();
+    }
+  }
+
+  const toOnline = async () => {
+    if (fbAuth.currentUser) {
+      await fbDatabase.ref('/online/' + fbAuth.currentUser.uid).set({
+        last_change: fb.database.ServerValue.TIMESTAMP,
+        username: fbAuth.currentUser.displayName,
+      });
+    }
+  }
+
+  fbDatabase.ref('.info/connected').on('value', (snapshot) => {
+    if (! fbAuth.currentUser || ! fbAuth.currentUser.uid || ! authChecked) {
+      return;
+    }
+    if (! snapshot.val()) {
+      (async () => {
+        await toOffline();
+        history.push('/entrance');
+      })();
+    }
+  });
+
   const value = {
     currentUser,
     login,
@@ -184,6 +180,8 @@ export const AuthProvider: React.FC = ({children}) => {
     removeTodo,
     doneTodo,
     doneTodos,
+    toOffline,
+    toOnline,
   };
 
   return (
