@@ -37,7 +37,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "deploy:fb": "npm run build && firebase deploy",
+    "fb": "firebase deploy"
   },
   "eslintConfig": {
     "extends": [
