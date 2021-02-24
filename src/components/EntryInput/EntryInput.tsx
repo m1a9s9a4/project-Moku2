@@ -75,7 +75,7 @@ const EntryInput: React.FC<EntryInputProps> = (props) => {
           className={classes.submit}
           onClick={onEntryHandler}
         >
-          Enter with Google
+          Googleで入場する
         </Button>
       </div>
       <Box mt={8}>
