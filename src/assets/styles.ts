@@ -30,4 +30,8 @@ export const contentStyles = (theme: Theme) =>
       width: theme.spacing(8),
       height: theme.spacing(8),
     },
+    doneIcon: {
+      color: '#35a506',
+      fontWeight: 'bold',
+    }
   });
