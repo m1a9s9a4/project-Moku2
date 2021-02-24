@@ -82,9 +82,9 @@ const Main: React.FC<ContentProps> = (props) => {
               <Button variant="contained" color="primary" className={classes.addUser} onClick={addTodos}>
                 追加
               </Button>
-              <IconButton>
-                <FileCopyIcon className={classes.block} color="inherit" />
-              </IconButton>
+              {/*<IconButton>*/}
+              {/*  <FileCopyIcon className={classes.block} color="inherit" />*/}
+              {/*</IconButton>*/}
             </Grid>
           </Grid>
         </Toolbar>

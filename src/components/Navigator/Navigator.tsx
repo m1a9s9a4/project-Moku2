@@ -90,7 +90,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-
 export interface NavigatorProps extends Omit<DrawerProps, 'classes'>, WithStyles<typeof styles> {}
 
 const Navigator: React.FC<NavigatorProps> = (props) => {
