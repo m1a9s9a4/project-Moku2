@@ -33,5 +33,10 @@ export const contentStyles = (theme: Theme) =>
     doneIcon: {
       color: '#35a506',
       fontWeight: 'bold',
+    },
+    textField: {
+      border: '1px solid grey',
+      borderRadius: '5px',
+      padding: '5px 10px'
     }
   });
