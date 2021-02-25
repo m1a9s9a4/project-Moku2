@@ -99,8 +99,10 @@ const Header = (props: HeaderProps) => {
         elevation={0}
       >
         <Tabs value={tab} textColor="inherit" onChange={onChangeHandler}>
-          <Tab textColor="inherit" label="トップ" />
+          <Tab textColor="inherit" label="タスク管理" />
           <Tab textColor="inherit" label="完了タスク一覧" />
+          <Tab textColor="inherit" label="オンラインユーザー" />
+          <Tab textColor="inherit" label="設定" />
         </Tabs>
       </AppBar>
     </React.Fragment>
