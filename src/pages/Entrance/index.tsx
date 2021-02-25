@@ -115,7 +115,7 @@ const Entrance: React.FC<IEntranceProps> = (props) => {
       </header>
       <Container component="main">
         <Grid container justify="center" style={{marginTop: 50}}>
-          <Typography component="h2" variant="h2" align="center">
+          <Typography component="h3" variant="h3" align="center">
             ようこそ<br />
             <span className={classes.pageTitle}>{appConfig.title}</span>へ
             <img src={Logo} alt={appConfig.title} className={classes.logoImage} />
