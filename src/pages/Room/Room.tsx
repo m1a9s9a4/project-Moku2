@@ -20,6 +20,7 @@ import ExitBtnContent from "../../components/Content/ExitBtnContent";
 import TodosContent from "../../components/Content/Todos";
 import DoneTodoContent from '../../components/Content/Todos/Done';
 import {appConfig} from "../../config";
+import SettingsContent from "../../components/Content/SettingsContent";
 
 const Copyright = () => {
   return (
@@ -219,11 +220,16 @@ const Room: React.FC<RoomProps> = (props) => {
           <main className={classes.main}>
             <div hidden={tab !== 0} >
               <TodosContent />
-              <Content />
               <ExitBtnContent onExitHandler={onExitHandler} />
             </div>
             <div hidden={tab !== 1}>
               <DoneTodoContent />
+            </div>
+            <div hidden={tab !== 2}>
+              <Content />
+            </div>
+            <div hidden={tab !== 3}>
+              <SettingsContent />
             </div>
           </main>
           <footer className={classes.footer}>
