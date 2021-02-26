@@ -5,11 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import {ListItem, ListItemIcon, ListItemText, TextField} from "@material-ui/core";
-import List from "@material-ui/core/List";
-import Checkbox from '@material-ui/core/Checkbox';
+import {TextField} from "@material-ui/core";
 
 import { contentStyles as styles } from "../../assets/styles";
 import { useAuth } from "../../contexts/AuthContext";
@@ -20,7 +17,20 @@ export interface ISettingsContent extends WithStyles<typeof styles> {}
 
 const Main: React.FC<ISettingsContent> = (props) => {
   const { classes } = props;
-  const {username} = useAuth();
+  const {username, updateUser} = useAuth();
+  const [newUsername, setNewUsername] = useState('');
+  const updateHandler = async () => {
+    if (!newUsername || newUsername === username) {
+      return;
+    }
+
+    await updateUser(newUsername);
+  }
+
+  const onUsernameChangeHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewUsername(e.target.value);
+  }
+
   return (
     <Paper className={classes.paper}>
       <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
@@ -41,11 +51,14 @@ const Main: React.FC<ISettingsContent> = (props) => {
               fullWidth
               type="text"
               defaultValue={username}
+              onChange={onUsernameChangeHandler}
               className={classes.textField}
             />
           </Grid>
-          <Grid md={2}>
-            <Button>追加</Button>
+        </Grid>
+        <Grid container justify="center">
+          <Grid style={{marginTop: '10px'}} md={5}>
+            <Button fullWidth color="primary" variant="contained" onClick={updateHandler}>更新</Button>
           </Grid>
         </Grid>
       </div>
