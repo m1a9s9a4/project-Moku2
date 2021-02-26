@@ -18,6 +18,7 @@ interface IContext {
   doneTodos;
   toOffline;
   toOnline;
+  updateUser;
 }
 
 const AuthContext = React.createContext({} as IContext);
@@ -156,6 +157,22 @@ export const AuthProvider: React.FC = ({children}) => {
     }
   }
 
+  const updateUser = async (username: string) => {
+    if (fbAuth.currentUser) {
+      await fbAuth.currentUser?.updateProfile({
+        displayName: username,
+      });
+      await fbDatabase.ref('/online/' + fbAuth.currentUser.uid).set({
+        last_change: fb.database.ServerValue.TIMESTAMP,
+        username: username,
+      });
+      await fbDatabase.ref('/username/' + fbAuth.currentUser.uid).set({
+        username: username,
+      })
+      setUsername(username);
+    }
+  }
+
   fbDatabase.ref('.info/connected').on('value', (snapshot) => {
     if (! fbAuth.currentUser || ! fbAuth.currentUser.uid || ! authChecked) {
       return;
@@ -182,6 +199,7 @@ export const AuthProvider: React.FC = ({children}) => {
     doneTodos,
     toOffline,
     toOnline,
+    updateUser,
   };
 
   return (
