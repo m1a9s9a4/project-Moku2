@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import Peer from 'skyway-js';
 import {useRef, useState} from "react";
 
-const peer = new Peer({key: '4093331f-b98d-4ab9-87bd-950c09692a50'});
+const peer = new Peer({key: process.env.REACT_APP_SKYWAY_API_KEY || ''});
 
 const VoiceChatContext: React.FC = () => {
   const [myId, setMyId] = useState('');
