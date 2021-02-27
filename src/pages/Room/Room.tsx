@@ -21,6 +21,7 @@ import TodosContent from "../../components/Content/Todos";
 import DoneTodoContent from '../../components/Content/Todos/Done';
 import {appConfig} from "../../config";
 import SettingsContent from "../../components/Content/SettingsContent";
+import VoiceChatContent from "../../components/Content/VoiceChatContent";
 
 const Copyright = () => {
   return (
@@ -229,6 +230,9 @@ const Room: React.FC<RoomProps> = (props) => {
               <Content />
             </div>
             <div hidden={tab !== 3}>
+              <VoiceChatContent />
+            </div>
+            <div hidden={tab !== 4}>
               <SettingsContent />
             </div>
           </main>
