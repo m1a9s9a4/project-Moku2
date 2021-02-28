@@ -16,13 +16,15 @@ interface IAvatarList extends WithStyles<typeof styles> {
 const AvatarList: React.FC<IAvatarList> = (props) => {
   const { classes, onlineMembers } = props;
   return (
-    <AvatarGroup max={10}>
+    <>
       {onlineMembers ? Object.keys(onlineMembers).map((key, i) => (
-        <AvatarItem username={onlineMembers[key].username} key={key}/>
-      )) : (
+          <AvatarGroup max={10}>
+            <AvatarItem username={onlineMembers[key].username} key={key}/>
+          </AvatarGroup>
+        )) : (
         <></>
       )}
-    </AvatarGroup>
+    </>
   )
 }
 
