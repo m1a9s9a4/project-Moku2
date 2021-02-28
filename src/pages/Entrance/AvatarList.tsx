@@ -10,18 +10,21 @@ const styles = (theme: Theme) =>
   })
 
 interface IAvatarList extends WithStyles<typeof styles> {
-  onlineMembers: object,
+  onlineMembers: object;
+  key?: number;
 }
 
 const AvatarList: React.FC<IAvatarList> = (props) => {
   const { classes, onlineMembers } = props;
   return (
     <>
-      {onlineMembers ? Object.keys(onlineMembers).map((key, i) => (
+      {onlineMembers ? (
           <AvatarGroup max={10}>
-            <AvatarItem username={onlineMembers[key].username} key={key}/>
+            {Object.keys(onlineMembers).map((key, i) => (
+              <AvatarItem username={onlineMembers[key].username} key={key}/>
+            ))}
           </AvatarGroup>
-        )) : (
+        ) : (
         <></>
       )}
     </>
