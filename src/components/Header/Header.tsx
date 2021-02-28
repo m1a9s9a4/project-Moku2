@@ -102,6 +102,7 @@ const Header = (props: HeaderProps) => {
           <Tab textColor="inherit" label="タスク管理" />
           <Tab textColor="inherit" label="完了タスク一覧" />
           <Tab textColor="inherit" label="オンラインユーザー" />
+          <Tab textColor="inherit" label="ボイスチャット" />
           <Tab textColor="inherit" label="設定" />
         </Tabs>
       </AppBar>
