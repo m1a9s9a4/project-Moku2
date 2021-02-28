@@ -11,7 +11,6 @@ const styles = (theme: Theme) =>
 
 interface IAvatarList extends WithStyles<typeof styles> {
   onlineMembers: object;
-  key?: number;
 }
 
 const AvatarList: React.FC<IAvatarList> = (props) => {
