@@ -37,6 +37,6 @@ export const contentStyles = (theme: Theme) =>
     textField: {
       border: '1px solid grey',
       borderRadius: '5px',
-      padding: '5px 10px'
+      padding: '5px 10px',
     }
   });
