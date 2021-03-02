@@ -71,7 +71,7 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
         })
       // }
     })
-  })
+  }, [localVideo])
 
   const onCreateRoomHandler = () => {
     console.log('onClick');
