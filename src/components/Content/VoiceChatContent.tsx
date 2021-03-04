@@ -67,11 +67,10 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
           audio: true
         }).then(localStream => {
           setLocalStream(localStream);
-          localVideo.current!.srcObject = localStream
         })
       // }
     })
-  }, [localVideo])
+  }, [])
 
   const onCreateRoomHandler = () => {
     console.log('onClick');
@@ -84,9 +83,6 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
       stream: localStream,
     }) as SfuRoom;
 
-    if (newRoom) {
-
-    }
 
     setTalking(true);
     setRoom(newRoom);
