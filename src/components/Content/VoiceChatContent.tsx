@@ -58,7 +58,9 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
   const localVideo = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    peer.once('open', async () => {
+    console.log("in ================");
+    peer.on('open', () => {
+      console.log('in -----------------');
       // const devices = await navigator.mediaDevices.enumerateDevices();
       // const hasVideoDevices = devices.filter(device => device.kind === 'videoinput').length !== 0;
       // if (hasVideoDevices) {
@@ -66,11 +68,20 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
           video: true,
           audio: true
         }).then(localStream => {
+          console.log('in get media')
           setLocalStream(localStream);
+          localVideo.current!.srcObject = localStream;
         })
+          .catch(e => {
+            console.log("eroror");
+            console.log(e);
+          })
+
       // }
     })
-  }, [])
+    console.log('out -----------------');
+
+  })
 
   const onCreateRoomHandler = () => {
     console.log('onClick');
@@ -121,7 +132,6 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
           </Grid>
         </div>
       </Paper>
-      {talking ? (
         <Paper className={classes.paper}>
           <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
             <Toolbar>
@@ -136,7 +146,6 @@ const VoiceChatContent: React.FC<IVoiceChatContent> = (props) => {
             </Grid>
           </div>
         </Paper>
-      ) : (<></>)}
     </>
   )
 }

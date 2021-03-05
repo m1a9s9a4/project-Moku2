@@ -1,33 +1,36 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import Peer from 'skyway-js';
 import {useRef, useState} from "react";
 
 const peer = new Peer({key: process.env.REACT_APP_SKYWAY_API_KEY || ''});
 
-const VoiceChatContext: React.FC = () => {
+interface IContext {
+  myId,
+  peer,
+}
+
+const VoiceChatContext = React.createContext({} as IContext);
+
+export const useVoiceChatContext = () => {
+  return useContext(VoiceChatContext);
+}
+
+export const VoiceChatProvider: React.FC = ({children}) => {
   const [myId, setMyId] = useState('');
   const [callId, setCallId] = useState('');
+  const [localStream, setLocalStream] = useState<MediaStream|null>(null);
   const localVideo = useRef<HTMLVideoElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    peer.on('open', () => {
-      setMyId(peer.id);
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(localStream => {
-        localVideo.current!.srcObject = localStream;
-      })
-    });
-  }, []);
-
-  peer.on('call', (mediaConnection) => {
-    if (localVideo.current) {
-      mediaConnection.answer(localVideo.current!.srcObject as MediaStream);
-
-      mediaConnection.on('stream', async (stream) => {
-        remoteVideo.current!.srcObject = stream
-      })
-    }
-  });
+  // peer.on('call', (mediaConnection) => {
+  //   if (localVideo.current) {
+  //     mediaConnection.answer(localVideo.current!.srcObject as MediaStream);
+  //
+  //     mediaConnection.on('stream', async (stream) => {
+  //       remoteVideo.current!.srcObject = stream
+  //     })
+  //   }
+  // });
 
   peer.on('disconnected', () => {
     if (localVideo.current) {
@@ -48,22 +51,14 @@ const VoiceChatContext: React.FC = () => {
     }
   }
 
+  const value = {
+    myId,
+    peer,
+  }
+
   return (
-    <>
-      <h2>音声通話テスト</h2>
-      <div>
-        <video width="400px" muted autoPlay playsInline ref={localVideo} />
-      </div>
-      <div>{myId}</div>
-      <div>
-        <input value={callId} onChange={e => setCallId(e.target.value)} />
-        <button onClick={makeCall}>電話する</button>
-      </div>
-      <div>
-        <video width="400px" muted autoPlay playsInline ref={remoteVideo} />
-      </div>
-    </>
+    <VoiceChatContext.Provider value={value}>
+      {children}
+    </VoiceChatContext.Provider>
   )
 }
-
-export default VoiceChatContext;
